@@ -6,9 +6,9 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'broker.emqx.io'
 port = 1883
-topic = "lapor/kopit"
+topic = "sister/lapor/kopit"
 # generate client ID with pub prefix randomly
-client_id = f'python-mqtt-{random.randint(0, 1000)}'
+client_id = f'server-lapor-kopit'
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -24,16 +24,14 @@ def connect_mqtt():
 
 
 def publish(client):
-    nama = input("Masukkan nama: ")
     nik = input("Masukkan NIK: ")
-    alamat = input("Masukkan alamat: ")
-    gejala = input("Masukkan gejala: ")
+    nama = input("Penjemputan berapa orang?: ")
     msg = f"nama: {nama}, nik: {nik}, alamat: {alamat}, gejala: {gejala}"
     result = client.publish(topic+"/"+nik, msg)
     # result: [0, 1]
     status = result[0]
     if status == 0:
-        print(f"Send `{msg}` to topic `{topic}`")
+        print(f"Send `{msg}` to topic `{topic}/{nik}`")
     else:
         print(f"Failed to send message to topic {topic}")
 

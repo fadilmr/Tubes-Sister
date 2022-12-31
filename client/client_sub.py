@@ -1,15 +1,16 @@
 import random
+import time
 
 from paho.mqtt import client as mqtt_client
 
 
 broker = 'broker.emqx.io'
 port = 1883
-topic = "sister/lapor/kopit/#"
-client_id = 'satgas-kopit'
+topic = "sister/lapor/kopit"
+# generate client ID with pub prefix randomly
+client_id = f'pelapor-kopit'
 
-
-def connect_mqtt() -> mqtt_client:
+def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -24,19 +25,10 @@ def connect_mqtt() -> mqtt_client:
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
-         # read nik.txt
-        f = open("nik.txt", "r")
-        nik_list = f.read().splitlines()
-        print(nik_list)
-        check = False
-        for i in nik_list:
-            if i == msg.topic.split("/")[2]:
-                check = True
-        f.close()
-        if(check):
-            print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+      print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
-    client.subscribe(topic)
+    nik = input("Masukkan NIK: ")
+    client.subscribe(topic+"/"+nik)
     client.on_message = on_message
 
 
@@ -44,7 +36,3 @@ def run():
     client = connect_mqtt()
     subscribe(client)
     client.loop_forever()
-
-
-if __name__ == '__main__':
-    run()
