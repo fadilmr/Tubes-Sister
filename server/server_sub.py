@@ -5,8 +5,8 @@ from paho.mqtt import client as mqtt_client
 
 broker = 'broker.emqx.io'
 port = 1883
-topic = "sister/lapor/kopit"
-client_id = f'satgas-kopit'
+topic = "sister/lapor/kopit/#"
+client_id = f'server-satgas-kopit'
 
 
 def connect_mqtt() -> mqtt_client:
@@ -27,32 +27,19 @@ def subscribe(client: mqtt_client):
          # read nik.txt
         f = open("nik.txt", "r")
         nik_list = f.read().splitlines()
-        print(nik_list)
         check = False
         for i in nik_list:
-            print(msg.topic.split("/")[3])
             if i == msg.topic.split("/")[3]:
                 check = True
         f.close()
         if(check):
-            print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
-            publish(client)
-
-    client.subscribe(topic+"/#")
+            print("============================")
+            print("Data lapor baru saja masuk:")
+            for i in msg.payload.decode().split(","):
+              print(i)
+            print("============================")
+    client.subscribe(topic)
     client.on_message = on_message
-
-def publish(client):
-    nik = input("Masukkan NIK: ")
-    nama = input("Masukkan nama: ")
-    jemput = input("Penjemputan berapa orang?: ")
-    waktu = input("Waktu penjemputan: ")
-    msg = f"nama: {nama}, nik: {nik}, jemput: {jemput}"
-    result = client.publish(topic+"/"+nik, msg)
-    status = result[0]
-    if status == 0:
-        print(f"Send `{msg}` to topic `{topic}/{nik}`")
-    else:
-        print(f"Failed to send message to topic {topic}")
 
 def run():
     client = connect_mqtt()
