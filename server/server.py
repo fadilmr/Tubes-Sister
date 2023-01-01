@@ -12,7 +12,7 @@ client_id = f'satgas-kopit'
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
-            print("Connected to MQTT Broker!")
+            print("Berhasil Terhubung")
         else:
             print("Failed to connect, return code %d\n", rc)
 
@@ -27,9 +27,9 @@ def subscribe(client: mqtt_client):
          # read nik.txt
         f = open("nik.txt", "r")
         nik_list = f.read().splitlines()
+        print(nik_list)
         check = False
         for i in nik_list:
-            # print(i)
             print(msg.topic.split("/")[3])
             if i == msg.topic.split("/")[3]:
                 check = True
@@ -45,9 +45,9 @@ def publish(client):
     nik = input("Masukkan NIK: ")
     nama = input("Masukkan nama: ")
     jemput = input("Penjemputan berapa orang?: ")
+    waktu = input("Waktu penjemputan: ")
     msg = f"nama: {nama}, nik: {nik}, jemput: {jemput}"
     result = client.publish(topic+"/"+nik, msg)
-    # result: [0, 1]
     status = result[0]
     if status == 0:
         print(f"Send `{msg}` to topic `{topic}/{nik}`")
