@@ -1,13 +1,17 @@
 import random
+import sys
 
 from paho.mqtt import client as mqtt_client
 
 
-broker = 'broker.emqx.io'
+# broker = '127.0.0.1'
+# port = 7777
+broker = 'broker.hivemq.com'
 port = 1883
-nik = input("Masukkan NIK: ")
+nik = sys.argv[1]
+print(nik)
 topic = "sister/lapor/kopit/server/"+nik
-client_id = f'client-kopit'
+client_id = f'client-kopit-{nik}-sub'
 
 
 def connect_mqtt() -> mqtt_client:
@@ -30,6 +34,7 @@ def subscribe(client: mqtt_client):
       for i in msg.payload.decode().split(","):
         print(i)
       print("============================")
+      client.disconnect()
     client.subscribe(topic)
     client.on_message = on_message
 

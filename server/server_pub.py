@@ -1,14 +1,18 @@
 import random
 import time
+import sys
 
 from paho.mqtt import client as mqtt_client
 
 
-broker = 'broker.emqx.io'
+# broker = '127.0.0.1'
+# port = 7777
+broker = 'broker.hivemq.com'
 port = 1883
 topic = "sister/lapor/kopit/server"
 # generate client ID with pub prefix randomly
-client_id = f'pelapor-kopit'
+nik = sys.argv[1]
+client_id = f'server-{nik}'
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -22,7 +26,7 @@ def connect_mqtt():
 
 
 def publish(client):
-    nik = input("Masukkan NIK: ")
+    print(nik)
     nama = input("Masukkan nama: ")
     jemput = input("Penjemputan berapa orang?: ")
     waktu = input("Waktu penjemputan: ")
@@ -34,6 +38,7 @@ def publish(client):
         print(f"Send `{msg}` to topic `{topic}/{nik}`")
     else:
         print(f"Failed to send message to topic {topic}/{nik}")
+    time.sleep(7)
 
 def run():
     client = connect_mqtt()
