@@ -26,11 +26,11 @@ def connect_mqtt():
 
 
 def publish(client):
-    print(nik)
-    nama = input("Masukkan nama: ")
+    print("NIK pelapor : "+nik)
+    nama = input("Masukkan nama penjemput: ")
     jemput = input("Penjemputan berapa orang?: ")
     waktu = input("Waktu penjemputan: ")
-    msg = f"Nama: {nama},NIK: {nik},Jemput: {jemput} orang,Waktu: {waktu}"
+    msg = f"Nama: {nama}, NIK: {nik}, Jemput: {jemput} orang, Waktu: {waktu}"
     result = client.publish(topic+"/"+nik, msg)
     print(topic+"/"+nik)
     status = result[0]
@@ -38,7 +38,8 @@ def publish(client):
         print(f"Send `{msg}` to topic `{topic}/{nik}`")
     else:
         print(f"Failed to send message to topic {topic}/{nik}")
-    time.sleep(7)
+    n=input("Press enter key to exit")
+
 
 def run():
     client = connect_mqtt()

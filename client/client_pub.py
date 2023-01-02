@@ -7,13 +7,15 @@ from paho.mqtt import client as mqtt_client
 
 # broker = '127.0.0.1'
 # port = 7777
+# konfigurasi broker
 broker = 'broker.hivemq.com'
 port = 1883
 topic = "sister/lapor/kopit"
-# generate client ID with pub prefix randomly
 
-nama = input("Masukkan nama: ")
-nik = input("Masukkan NIK: ")
+# input data pelapor
+nik = input("Masukkan NIK pelapor: ")
+namaPelapor = input("Masukkan nama pelapor: ")
+namaTerduga = input("Masukkan nama terduga: ")
 alamat = input("Masukkan alamat: ")
 gejala = input("Masukkan gejala: ")
 
@@ -28,8 +30,9 @@ def connect_mqtt():
     return client
 
 
+# publish data pelapor
 def publish(client):
-    msg = f"Nama: {nama},NIK: {nik},Alamat: {alamat},Gejala: {gejala}"
+    msg = f"NIK: {nik}, Nama Pelapor : {namaPelapor}, Nama Terduga Covid : {namaTerduga}, Alamat: {alamat},Gejala: {gejala}"
     result = client.publish(topic+"/"+nik, msg)
     # result: [0, 1]
     status = result[0]
